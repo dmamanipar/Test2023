@@ -1,0 +1,6 @@
+dceb0bff16a04750adddfd9a4811f731
+
+U:davidmp
+P:Da12345*
+
+http://docker.jenkins:9080/
