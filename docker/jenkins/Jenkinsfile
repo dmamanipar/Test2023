@@ -5,33 +5,35 @@ pipeline {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "MAVEN_HOME"
     }
-
+    environment {
+        SonarToken = credentials('squ_10bc49edfc0d4d831b9b623c7df9ad1050d5439f')
+    }
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/robinarehen/multi-modules'
+                git 'https://github.com/dmamanipar/SysEventos2023'
             }
         }
         stage('Build') {
             steps {
                 // -f: permite especificar el pom.xml que se debe ejecutar
                 // para cuando una carpeta raíz contiene varios proyectos o módulos
-                sh "mvn -DskipTests clean package -f micro-product/pom.xml"
+                sh "mvn -DskipTests clean package -f SysAsistenciaAn/pom.xml"
             }
         }
         stage('Test') {
             steps {
-                sh "mvn test -f micro-product/pom.xml"
+                sh "mvn test -f SysAsistenciaAn/pom.xml"
             }
         }
         stage('Sonar') {
             steps {
-                sh "mvn sonar:sonar -Pcoverage -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=token -f micro-product/pom.xml"
+                sh "mvn sonar:sonar -Pcoverage -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=${SonarToken} -f SysAsistenciaAn/pom.xml"
             }
         }
         stage('Deploy') {
             steps {
-                sh "mvn spring-boot:run -f micro-product/pom.xml"
+                sh "mvn spring-boot:run -f SysAsistenciaAn/pom.xml"
             }
         }
     }
